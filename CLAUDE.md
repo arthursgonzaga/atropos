@@ -79,7 +79,7 @@ docker run -p 8080:8080 --env-file .env atropos-service
 ```
 
 **Service responsibilities (in order on alert receipt):**
-1. Validate incoming JSON payload; return `400 Bad Request` on invalid input
+1. Validate incoming JSON payload; return `422 Unprocessable Entity` on invalid input (FastAPI default)
 2. `POST /api/job` to OctoPrint with `{"command": "pause", "action": "pause"}` and `X-Api-Key` header
 3. Send Telegram notification via Synapse webhook: `⚠️ Alerta Ender 3 V3 SE: O filamento acabou! Impressão pausada automaticamente.`
 4. On OctoPrint `HTTPError` / `ConnectionError`: log full error to container stdout and fire a critical Telegram alert: `🚨 CRÍTICO: Falha ao tentar pausar a Ender 3 V3 SE! O OctoPrint está inacessível.`
