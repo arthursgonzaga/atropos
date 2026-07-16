@@ -26,3 +26,12 @@ async def test_send_alert_raises_on_failure():
     )
     with pytest.raises(httpx.HTTPStatusError):
         await send_alert("test message")
+
+
+@respx.mock
+async def test_send_alert_raises_on_connection_error():
+    respx.post("http://synapse.local/message").mock(
+        side_effect=httpx.ConnectError("refused")
+    )
+    with pytest.raises(httpx.ConnectError):
+        await send_alert("test message")
